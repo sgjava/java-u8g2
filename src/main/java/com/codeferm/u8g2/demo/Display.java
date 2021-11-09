@@ -38,8 +38,7 @@ public class Display {
     public long init(final int gpio, final int bus, final int address) {
         final var u8g2 = U8g2.initU8g2();
         U8g2.setupSsd1306I2c128x64NonameF(u8g2, U8G2_R0, u8x8_byte_arm_linux_hw_i2c, u8x8_arm_linux_gpio_and_delay);
-        U8g2.setGpioChip(u8g2, gpio);
-        U8g2.setI2cBus(u8g2, bus);
+        U8g2.initUserData(u8g2, gpio, bus);
         U8g2.setI2CAddress(u8g2, address * 2);
         U8g2.initDisplay(u8g2);
         logger.debug(String.format("Size %d x %d, draw color %d", U8g2.getDisplayWidth(u8g2), U8g2.getDisplayHeight(u8g2), U8g2.
@@ -59,8 +58,7 @@ public class Display {
     public long init(final int gpio, final int bus, final int dc, final int reset) {
         final var u8g2 = U8g2.initU8g2();
         U8g2.setupSsd1306128x64NonameF(u8g2, U8G2_R0, u8x8_byte_arm_linux_hw_spi, u8x8_arm_linux_gpio_and_delay);
-        U8g2.setGpioChip(u8g2, gpio);
-        U8g2.setSpiBus(u8g2, bus);
+        U8g2.initUserData(u8g2, gpio, bus);
         U8g2.setPin(u8g2, U8X8_PIN_DC, dc);
         U8g2.setPin(u8g2, U8X8_PIN_RESET, reset);
         U8g2.initDisplay(u8g2);
@@ -91,12 +89,12 @@ public class Display {
     public void done(final long u8g2, final boolean i2c) {
         if (i2c) {
             logger.debug("Done I2C");
+            U8g2.doneUserData(u8g2);
             U8g2.doneI2c();
-            U8g2.donePins();
         } else {
             logger.debug("Done SPI");
+            U8g2.doneUserData(u8g2);
             U8g2.doneSpi();
-            U8g2.donePins();
         }
         U8g2.done(u8g2);
     }

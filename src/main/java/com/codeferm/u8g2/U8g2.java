@@ -3161,38 +3161,26 @@ public class U8g2 {
     @JniMethod(accessor = "set_pin")
     public static native void setPin(final long u8g2, final int pin, final int value);
 
-    @JniMethod(accessor = "done_pins")
-    public static native void donePins();
+    /*
+     * u8g2port.h
+     */
+    @JniMethod(accessor = "init_user_data")
+    public static native void initUserData(final long u8g2, final int gpioChip, final int bus);
 
+    @JniMethod(accessor = "done_user_data")
+    public static native void doneUserData(final long u8g2);
+    
     @JniMethod(accessor = "done_i2c")
     public static native void doneI2c();
 
     @JniMethod(accessor = "done_spi")
     public static native void doneSpi();
-
+    
     /*
      * u8x8 wrapper
      */
     @JniMethod(accessor = "u8g2_GetU8x8")
     public static native long getU8x8(final long u8g2);
-
-    @JniMethod(accessor = "u8g2_GetGPIOChip")
-    public static native int getGpioChip(final long u8g2);
-
-    @JniMethod(accessor = "u8g2_SetGPIOChip")
-    public static native void setGpioChip(final long u8g2, final int chipNum);
-
-    @JniMethod(accessor = "u8g2_GetSPIBus")
-    public static native int getSpiBus(final long u8g2);
-
-    @JniMethod(accessor = "u8g2_SetSPIBus")
-    public static native void setSpiBus(final long u8g2, final int busNum);
-
-    @JniMethod(accessor = "u8g2_GetI2CBus")
-    public static native int getI2cBus(final long u8g2);
-
-    @JniMethod(accessor = "u8g2_SetI2CBus")
-    public static native void setI2cBus(final long u8g2, final int busNum);
     
     @JniMethod(accessor = "u8g2_InitInterface")
     public static native void initInterface(final long u8g2);
