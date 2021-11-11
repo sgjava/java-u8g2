@@ -150,7 +150,7 @@ cd >> $logfile 2>&1
 log "Removing u8g2"
 rm -rf u8g2 >> $logfile 2>&1
 log "Cloning U8g2..."
-git clone --depth 1 https://github.com/olikraus/u8g2.git >> $logfile 2>&1
+git clone --depth 1 https://github.com/sgjava/u8g2.git >> $logfile 2>&1
 log "Copying files into java-u8g2..."
 # Order is important here because some files will be overwritten
 cp -a "$HOME/u8g2/csrc/." "$HOME/java-u8g2/src/main/native-package/src/"
