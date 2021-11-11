@@ -21,10 +21,3 @@ u8g2_t *init_u8g2(void) {
 void done(u8g2_t *u8g2) {
     free(u8g2);
 }
-
-/*
- * u8x8_SetPin wrapper.
- */
-void set_pin(u8g2_t *u8g2, int pin, int value) {
-    u8x8_SetPin(u8g2_GetU8x8(u8g2), pin, value);
-}

@@ -12,7 +12,6 @@ extern "C" {
 
 u8g2_t *init_u8g2(void);
 void done(u8g2_t *u8g2);
-void set_pin(u8g2_t *u8g2, int pin, int value);
 
 #ifdef __cplusplus
 }

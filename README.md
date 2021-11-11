@@ -11,20 +11,18 @@ This gets attached to the Maven project as as the native source zip file.
 * Builds the native source tar for the current platform.
 * Built native library is stored in a platform specific jar. This gets attached
 to the Maven project as a platform specific jar file.
-* Build code on target platform, no cross compiling required.
-* Java code follows C API, so if you used U8g2 in C or even NodeMcu with Lua it
+* Build code on target platform with a little as 256 MB, no cross compiling required.
+* Java code follows C API, so if you used U8g2 in C, C++ or even NodeMcu with Lua it
 will immediately be familar. No goofy Java wrapper with a totally different API.
 
-I submitted a [PR](https://github.com/olikraus/u8g2/pull/1673) that allows state
-of GPIO chip, I2C and SPI busses to be stored in u8x8_struct.user_ptr. This will
-allow multiple displays and multiple I2C/SPI busses. I'll point to my fork until
-this is merged.
+I've been submitting PRs to U8g2 for arm-linux and made it thread safe and multi-display
+capable. I also greatly improved performance of the I2C and SPI software drivers. 
 
 ```
 final var u8g2 = U8g2.initU8g2();
 // Change this to your actual display
 U8g2.setupSsd1306I2c128x64NonameF(u8g2, U8G2_R0, u8x8_byte_arm_linux_hw_i2c, u8x8_arm_linux_gpio_and_delay);
-U8g2.initUserData(u8g2, 0, 0);
+U8g2.initI2cHw(u8g2, 0);
 U8g2.setI2CAddress(u8g2, 0x3c * 2);
 U8g2.initDisplay(u8g2);
 logger.debug(String.format("Size %d x %d, draw color %d", U8g2.getDisplayWidth(u8g2), U8g2.getDisplayHeight(u8g2), U8g2.
