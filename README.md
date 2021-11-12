@@ -11,7 +11,7 @@ This gets attached to the Maven project as as the native source zip file.
 * Builds the native source tar for the current platform.
 * Built native library is stored in a platform specific jar. This gets attached
 to the Maven project as a platform specific jar file.
-* Build code on target platform with a little as 256 MB, no cross compiling required.
+* Build code on target platform with aa little as 256 MB, no cross compiling required.
 * Java code follows C API, so if you used U8g2 in C, C++ or even NodeMcu with Lua it
 will immediately be familar. No goofy Java wrapper with a totally different API.
 
@@ -101,7 +101,7 @@ could have gone wrong during the build/bindings generation processes.
 * If you need to recompile use `mvn clean install -Dmaven.compiler.source=11 -Dmaven.compiler.target=11` on ARM32.
 
 ## Run demos
-* `java -cp $HOME/java-u8g2/target/java-u8g2-1.0.0-SNAPSHOT.jar:$HOME/java-u8g2/target/java-u8g2-1.0.0-SNAPSHOT-linux64.jar com.codeferm.u8g2.demo.Text`
+* `java -cp $HOME/java-u8g2/target/java-u8g2-1.0.0-SNAPSHOT.jar:$HOME/java-u8g2/target/java-u8g2-1.0.0-SNAPSHOT-linux64.jar com.codeferm.u8g2.demo.Graphics`
 
 Note that the native library jar has a suffix such as linux32, so depending on
 your target platform it could be different. To see a list of demos 
