@@ -316,18 +316,19 @@ public class Graphics implements Callable<Integer> {
         var exitCode = 0;
         display = new Display();
         // Initialize user_data_struct based on display type
+        logger.debug(String.format("Type %s", type));
         switch (type.toLowerCase()) {
             case "i2c-hw":
                 u8g2 = display.initHwI2c(bus, address);
                 break;
             case "i2c-sw":
-                display.initSwI2c(gpio, scl, sda, delay);
+                u8g2 = display.initSwI2c(gpio, scl, sda, delay);
                 break;
             case "spi-hw":
-                display.initHwSpi(gpio, bus, dc, reset);
+                u8g2 = display.initHwSpi(gpio, bus, dc, reset);
                 break;
             case "spi-sw":
-                display.initSwSpi(gpio, dc, reset, mosi, sck, cs, delay);
+                u8g2 = display.initSwSpi(gpio, dc, reset, mosi, sck, cs, delay);
                 break;
             default:
                 throw new RuntimeException(String.format("%s is not a valid type", type));
