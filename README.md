@@ -101,7 +101,7 @@ could have gone wrong during the build/bindings generation processes.
 * If you need to recompile use `mvn clean install -Dmaven.compiler.source=11 -Dmaven.compiler.target=11` on ARM32.
 
 ## Run demos
-* `java -cp $HOME/java-u8g2/target/java-u8g2-1.0.0-SNAPSHOT.jar:$HOME/java-u8g2/target/java-u8g2-1.0.0-SNAPSHOT-linux64.jar com.codeferm.u8g2.demo.Graphics`
+* `java -cp $HOME/java-u8g2/target/java-u8g2-1.0.0-SNAPSHOT.jar:$HOME/java-u8g2/target/java-u8g2-1.0.0-SNAPSHOT-linux64.jar com.codeferm.u8g2.demo.Graphics --help`
 
 Note that the native library jar has a suffix such as linux32, so depending on
 your target platform it could be different. To see a list of demos 

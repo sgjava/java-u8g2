@@ -99,8 +99,8 @@ public class Display {
             final long delay) {
         final var u8g2 = U8g2.initU8g2();
         U8g2.setupSsd1306128x64NonameF(u8g2, U8G2_R0, u8x8_byte_4wire_sw_spi, u8x8_arm_linux_gpio_and_delay);
-        U8g2.initDisplay(u8g2);
         U8g2.initSpiSw(u8g2, gpio, dc, reset, mosi, sck, cs, delay);
+        U8g2.initDisplay(u8g2);
         logger.debug(String.format("Size %d x %d, draw color %d", U8g2.getDisplayWidth(u8g2), U8g2.getDisplayHeight(u8g2), U8g2.
                 getDrawColor(u8g2)));
         return u8g2;
