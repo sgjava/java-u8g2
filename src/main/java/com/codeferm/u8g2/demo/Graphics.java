@@ -83,7 +83,7 @@ public class Graphics implements Callable<Integer> {
      * CS pin for SPI.
      */
     @Option(names = {"--cs"}, description = "SPI CS pin (13 default)")
-    private int cs = 14;
+    private int cs = 13;
     /**
      * Nanosecond delay or 0 for none for software I2C and SPI.
      */
