@@ -11,7 +11,7 @@ This gets attached to the Maven project as as the native source zip file.
 * Builds the native source tar for the current platform.
 * Built native library is stored in a platform specific jar. This gets attached
 to the Maven project as a platform specific jar file.
-* Build code on target platform with aa little as 256 MB, no cross compiling required.
+* Build code on target platform with as little as 256 MB, no cross compiling required.
 * Java code follows C API, so if you used U8g2 in C, C++ or even NodeMcu with Lua it
 will immediately be familar. No goofy Java wrapper with a totally different API.
 
