@@ -31,34 +31,64 @@ public class Graphics implements Callable<Integer> {
     /**
      * Type option (true = I2C).
      */
-    @Option(names = {"-t", "--type"}, description = "Defaults to I2C")
-    private boolean type = true;
+    @Option(names = {"--type"}, description
+            = "i2c-hw I2C hardware, i2c-sw I2C software, spi-hw SPI hardware, spi-sw SPI software (i2c-hw default)")
+    private String type = "i2c-hw";
     /**
      * GPIO chip number.
      */
-    @Option(names = {"-g", "--gpio"}, description = "GPIO chip number")
+    @Option(names = {"--gpio"}, description = "GPIO chip number (chip 0 default)")
     private int gpio = 0x0;
     /**
      * I2C or SPI bus number.
      */
-    @Option(names = {"-b", "--bus"}, description = "I2C or SPI bus number (0 default, for SPI 0x10 is /dev/spidev1.0)")
+    @Option(names = {"--bus"}, description = "I2C or SPI bus number (/dec/i2c-0 for I2C and 0x10 is /dev/spidev1.0 for SPI default)")
     private int bus = 0x0;
     /**
      * I2C address.
      */
-    @Option(names = {"-a", "--address"}, description = "I2C address (0x3c default)")
+    @Option(names = {"--address"}, description = "I2C address (0x3c default)")
     private int address = 0x3c;
+    /**
+     * I2C SCL.
+     */
+    @Option(names = {"--scl"}, description = "I2C SCL for type i2c-sw (11 default)")
+    private int scl = 11;
+    /**
+     * I2C SDA.
+     */
+    @Option(names = {"--sda"}, description = "I2C SDA for type i2c-sw (12 default)")
+    private int sda = 12;
     /**
      * DC pin for SPI.
      */
-    @Option(names = {"-d", "--dc"}, description = "SPI DC pin (198 default)")
+    @Option(names = {"--dc"}, description = "SPI DC pin (198 default)")
     private int dc = 198;
     /**
      * RESET pin for SPI.
      */
-    @Option(names = {"-r", "--reset"}, description = "SPI RESET pin (199 default)")
+    @Option(names = {"--reset"}, description = "SPI RESET pin (199 default)")
     private int reset = 199;
-
+    /**
+     * MOSI pin for SPI.
+     */
+    @Option(names = {"--mosi"}, description = "SPI MOSI pin (15 default)")
+    private int mosi = 15;
+    /**
+     * SCK pin for SPI.
+     */
+    @Option(names = {"--sck"}, description = "SPI SCK pin (14 default)")
+    private int sck = 14;
+    /**
+     * CS pin for SPI.
+     */
+    @Option(names = {"--cs"}, description = "SPI CS pin (13 default)")
+    private int cs = 14;
+    /**
+     * Nanosecond delay or 0 for none for software I2C and SPI.
+     */
+    @Option(names = {"--delay"}, description = "Nanosecond delay for software I2c and SPI (0 default)")
+    private int delay = 14;
     /**
      * Pointer to u8g2_t struct.
      */
@@ -285,12 +315,22 @@ public class Graphics implements Callable<Integer> {
     public Integer call() throws InterruptedException {
         var exitCode = 0;
         display = new Display();
-        if (type) {
-            // I2C
-            u8g2 = display.init(gpio, bus, address);
-        } else {
-            //SPI
-            u8g2 = display.init(gpio, bus, dc, reset);
+        // Initialize user_data_struct based on display type
+        switch (type.toLowerCase()) {
+            case "i2c-hw":
+                u8g2 = display.initHwI2c(bus, address);
+                break;
+            case "i2c-sw":
+                display.initSwI2c(gpio, scl, sda, delay);
+                break;
+            case "spi-hw":
+                display.initHwSpi(gpio, bus, dc, reset);
+                break;
+            case "spi-sw":
+                display.initSwSpi(gpio, dc, reset, mosi, sck, cs, delay);
+                break;
+            default:
+                throw new RuntimeException(String.format("%s is not a valid type", type));
         }
         width = U8g2.getDisplayWidth(u8g2);
         height = U8g2.getDisplayHeight(u8g2);
@@ -301,7 +341,7 @@ public class Graphics implements Callable<Integer> {
         ellipses();
         pixels();
         U8g2.setPowerSave(u8g2, 1);
-        display.done(u8g2, type);
+        display.done(u8g2);
         return exitCode;
     }
 

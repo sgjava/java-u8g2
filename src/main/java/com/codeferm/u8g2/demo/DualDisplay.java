@@ -130,9 +130,9 @@ public class DualDisplay implements Callable<Integer> {
         var exitCode = 0;
         final var display = new Display();
         // I2C
-        final var i2c = display.init(0, 0, 0x3c);
+        final var i2c = display.initHwI2c(0, 0x3c);
         //SPI
-        final var spi = display.init(0, 0x10, 198, 199);
+        final var spi = display.initHwSpi(0, 0x10, 198, 199);
         U8g2.setPowerSave(i2c, 0);
         U8g2.setFont(i2c, u8g2_font_10x20_tr);
         U8g2.setPowerSave(spi, 0);
@@ -142,8 +142,8 @@ public class DualDisplay implements Callable<Integer> {
         display.sleep(5000);
         U8g2.setPowerSave(i2c, 1);
         U8g2.setPowerSave(spi, 1);
-        display.done(i2c, true);
-        display.done(spi, false);
+        display.done(i2c);
+        display.done(spi);
         return exitCode;
     }
 
