@@ -104,7 +104,11 @@ public class U8g2 {
     @JniField(flags = {CONSTANT})
     public static long u8x8_byte_arm_linux_hw_i2c;
     @JniField(flags = {CONSTANT})
+    public static long u8x8_byte_sw_i2c;
+    @JniField(flags = {CONSTANT})
     public static long u8x8_byte_arm_linux_hw_spi;
+    @JniField(flags = {CONSTANT})
+    public static long u8x8_byte_4wire_sw_spi;
     @JniField(flags = {CONSTANT})
     public static long u8x8_u8toa;
     @JniField(flags = {CONSTANT})

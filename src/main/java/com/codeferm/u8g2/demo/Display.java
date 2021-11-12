@@ -6,8 +6,10 @@ package com.codeferm.u8g2.demo;
 import com.codeferm.u8g2.U8g2;
 import static com.codeferm.u8g2.U8g2.U8G2_R0;
 import static com.codeferm.u8g2.U8g2.u8x8_arm_linux_gpio_and_delay;
+import static com.codeferm.u8g2.U8g2.u8x8_byte_4wire_sw_spi;
 import static com.codeferm.u8g2.U8g2.u8x8_byte_arm_linux_hw_i2c;
 import static com.codeferm.u8g2.U8g2.u8x8_byte_arm_linux_hw_spi;
+import static com.codeferm.u8g2.U8g2.u8x8_byte_sw_i2c;
 import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.LogManager;
 
@@ -54,7 +56,7 @@ public class Display {
      */
     public long initSwI2c(final int gpio, final int scl, final int sda, final long delay) {
         final var u8g2 = U8g2.initU8g2();
-        U8g2.setupSsd1306I2c128x64NonameF(u8g2, U8G2_R0, u8x8_byte_arm_linux_hw_i2c, u8x8_arm_linux_gpio_and_delay);
+        U8g2.setupSsd1306I2c128x64NonameF(u8g2, U8G2_R0, u8x8_byte_sw_i2c, u8x8_arm_linux_gpio_and_delay);
         U8g2.initI2cSw(u8g2, gpio, scl, sda, delay);
         U8g2.initDisplay(u8g2);
         logger.debug(String.format("Size %d x %d, draw color %d", U8g2.getDisplayWidth(u8g2), U8g2.getDisplayHeight(u8g2), U8g2.
@@ -96,7 +98,7 @@ public class Display {
     public long initSwSpi(final int gpio, final int dc, final int reset, final int mosi, final int sck, final int cs,
             final long delay) {
         final var u8g2 = U8g2.initU8g2();
-        U8g2.setupSsd1306128x64NonameF(u8g2, U8G2_R0, u8x8_byte_arm_linux_hw_spi, u8x8_arm_linux_gpio_and_delay);
+        U8g2.setupSsd1306128x64NonameF(u8g2, U8G2_R0, u8x8_byte_4wire_sw_spi, u8x8_arm_linux_gpio_and_delay);
         U8g2.initDisplay(u8g2);
         U8g2.initSpiSw(u8g2, gpio, dc, reset, mosi, sck, cs, delay);
         logger.debug(String.format("Size %d x %d, draw color %d", U8g2.getDisplayWidth(u8g2), U8g2.getDisplayHeight(u8g2), U8g2.
