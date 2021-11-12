@@ -88,7 +88,7 @@ public class Graphics implements Callable<Integer> {
      * Nanosecond delay or 0 for none for software I2C and SPI.
      */
     @Option(names = {"--delay"}, description = "Nanosecond delay for software I2c and SPI (0 default)")
-    private long delay = 14;
+    private long delay = 0;
     /**
      * Pointer to u8g2_t struct.
      */
