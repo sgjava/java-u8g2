@@ -322,10 +322,10 @@ public class Graphics implements Callable<Integer> {
                 u8g2 = display.initHwI2c(bus, address);
                 break;
             case "i2c-sw":
-                u8g2 = display.initSwI2c(gpio, scl, sda, delay);
+                u8g2 = display.initSwI2c(gpio, scl, sda, reset, delay);
                 break;
             case "spi-hw":
-                u8g2 = display.initHwSpi(gpio, bus, dc, reset);
+                u8g2 = display.initHwSpi(gpio, bus, dc, reset, cs);
                 break;
             case "spi-sw":
                 u8g2 = display.initSwSpi(gpio, dc, reset, mosi, sck, cs, delay);

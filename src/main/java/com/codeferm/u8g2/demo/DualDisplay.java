@@ -6,6 +6,7 @@ package com.codeferm.u8g2.demo;
 import com.codeferm.u8g2.Common;
 import static com.codeferm.u8g2.Fonts.u8g2_font_10x20_tr;
 import com.codeferm.u8g2.U8g2;
+import static com.codeferm.u8g2.U8x8.U8X8_PIN_NONE;
 import java.util.concurrent.Callable;
 import org.apache.logging.log4j.LogManager;
 import picocli.CommandLine;
@@ -132,7 +133,7 @@ public class DualDisplay implements Callable<Integer> {
         // I2C
         final var i2c = display.initHwI2c(0, 0x3c);
         //SPI
-        final var spi = display.initHwSpi(0, 0x10, 198, 199);
+        final var spi = display.initHwSpi(0, 0x10, 198, 199, U8X8_PIN_NONE);
         U8g2.setPowerSave(i2c, 0);
         U8g2.setFont(i2c, u8g2_font_10x20_tr);
         U8g2.setPowerSave(spi, 0);

@@ -51,13 +51,14 @@ public class Display {
      * @param gpio GPIO chip number.
      * @param scl SCL.
      * @param sda SDA.
+     * @param res RESET pin.
      * @param delay Nanosecond delay or 0 for none.
      * @return Pointer to u8g2_t structure.
      */
-    public long initSwI2c(final int gpio, final int scl, final int sda, final long delay) {
+    public long initSwI2c(final int gpio, final int scl, final int sda, final int res, final long delay) {
         final var u8g2 = U8g2.initU8g2();
         U8g2.setupSsd1306I2c128x64NonameF(u8g2, U8G2_R0, u8x8_byte_sw_i2c, u8x8_arm_linux_gpio_and_delay);
-        U8g2.initI2cSw(u8g2, gpio, scl, sda, delay);
+        U8g2.initI2cSw(u8g2, gpio, scl, sda, res, delay);
         U8g2.initDisplay(u8g2);
         logger.debug(String.format("Size %d x %d, draw color %d", U8g2.getDisplayWidth(u8g2), U8g2.getDisplayHeight(u8g2), U8g2.
                 getDrawColor(u8g2)));
@@ -70,13 +71,14 @@ public class Display {
      * @param gpio GPIO chip number.
      * @param bus SPI bus number.
      * @param dc DC pin.
-     * @param reset RESET pin.
+     * @param res RESET pin.
+     * @param cs CS pin.
      * @return Pointer to u8g2_t structure.
      */
-    public long initHwSpi(final int gpio, final int bus, final int dc, final int reset) {
+    public long initHwSpi(final int gpio, final int bus, final int dc, final int res, final int cs) {
         final var u8g2 = U8g2.initU8g2();
         U8g2.setupSsd1306128x64NonameF(u8g2, U8G2_R0, u8x8_byte_arm_linux_hw_spi, u8x8_arm_linux_gpio_and_delay);
-        U8g2.initSpiHw(u8g2, gpio, bus, dc, reset);
+        U8g2.initSpiHw(u8g2, gpio, bus, dc, res, cs);
         U8g2.initDisplay(u8g2);
         logger.debug(String.format("Size %d x %d, draw color %d", U8g2.getDisplayWidth(u8g2), U8g2.getDisplayHeight(u8g2), U8g2.
                 getDrawColor(u8g2)));

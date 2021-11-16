@@ -3164,10 +3164,10 @@ public class U8g2 {
     public static native void initI2cHw(final long u8g2, final int bus);
 
     @JniMethod(accessor = "init_i2c_sw")
-    public static native void initI2cSw(final long u8g2, final int gpioChip, final int scl, final int sda, final long delay);
+    public static native void initI2cSw(final long u8g2, final int gpioChip, final int scl, final int sda, final int res, final long delay);
 
     @JniMethod(accessor = "init_spi_hw")
-    public static native void initSpiHw(final long u8g2, final int gpioChip, final int bus, final int dc, final int res);
+    public static native void initSpiHw(final long u8g2, final int gpioChip, final int bus, final int dc, final int res, final int cs);
 
     @JniMethod(accessor = "init_spi_sw")
     public static native void initSpiSw(final long u8g2, final int gpioChip, final int dc, final int res, final int mosi, final int sck,
