@@ -21,3 +21,17 @@ u8g2_t *init_u8g2(void) {
 void done(u8g2_t *u8g2) {
     free(u8g2);
 }
+
+/*
+ * Macro expansion hoses HawtJNI compile.
+ */
+int getBufferSize(u8g2_t *u8g2) {
+    return u8g2_GetBufferSize(u8g2);
+}
+
+/*
+ * Macro expansion hoses HawtJNI compile.
+ */
+void setBufferPtr(u8g2_t *u8g2, uint8_t *buf) {
+    u8g2_SetBufferPtr(u8g2, buf);
+}

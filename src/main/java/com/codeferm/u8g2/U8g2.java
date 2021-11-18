@@ -3156,6 +3156,12 @@ public class U8g2 {
 
     @JniMethod(accessor = "done")
     public static native void done(final long u8g2);
+    
+    @JniMethod(accessor = "setBufferPtr")
+    public static native void setBufferPtr(final long u8g2, final long buf);
+
+    @JniMethod(accessor = "getBufferSize")
+    public static native int getBufferSize(final long u8g2);
 
     /*
      * u8g2port.h
@@ -3239,12 +3245,6 @@ public class U8g2 {
     /*
      * u8g2_buffer.c
      */
-    @JniMethod(accessor = "u8g2_SetBufferPtr")
-    public static native void setBufferPtr(final long u8g2, final long buf);
-
-    @JniMethod(accessor = "u8g2_GetBufferSize")
-    public static native int getBufferSize(final long u8g2);
-
     @JniMethod(accessor = "u8g2_GetBufferPtr")
     public static native long getBufferPtr(@JniArg(cast = "u8g2_t *") final long u8g2);
 

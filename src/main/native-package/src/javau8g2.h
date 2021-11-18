@@ -12,6 +12,7 @@ extern "C" {
 
 u8g2_t *init_u8g2(void);
 void done(u8g2_t *u8g2);
+int getBufferSize(u8g2_t *u8g2);
 
 #ifdef __cplusplus
 }
