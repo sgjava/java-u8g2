@@ -42,7 +42,7 @@ U8g2.doneUserData(u8g2);
 U8g2.doneI2c();
 ```
 
-![Pine A64](images/duo.jpg)
+![Duo tith 3 displays](images/duo.jpg)
 
 ## SBC configuration
 * If you are using Armbian then use `armbian-config` or edit `/boot/armbianEnv.txt`
