@@ -138,7 +138,7 @@ public class U8g2 {
 
     @JniMethod(accessor = "u8g2_SendF")
     public static native void sendF(final long u8g2, final String fmt, long args);
-    
+
     @JniMethod(accessor = "u8g2_Setup_null")
     public static native void setupNull(final long u8g2, final long rotation, final long byteCb, final long gpioAndDelayCb);
 
@@ -3156,7 +3156,7 @@ public class U8g2 {
 
     @JniMethod(accessor = "done")
     public static native void done(final long u8g2);
-    
+
     @JniMethod(accessor = "setBufferPtr")
     public static native void setBufferPtr(final long u8g2, final long buf);
 
@@ -3170,13 +3170,20 @@ public class U8g2 {
     public static native void initI2cHw(final long u8g2, final int bus);
 
     @JniMethod(accessor = "init_i2c_sw")
-    public static native void initI2cSw(final long u8g2, final int gpioChip, final int scl, final int sda, final int res, final long delay);
+    public static native void initI2cSw(final long u8g2, final int gpioChip, final int scl, final int sda, final int res,
+            final long delay);
+
+    @JniMethod(accessor = "init_spi_hw_advanced")
+    public static native void initSpiHwAdvanced(final long u8g2, final int gpioChip, final int bus, final int dc, final int res,
+            final int cs, short spi_mode, long max_speed);
 
     @JniMethod(accessor = "init_spi_hw")
-    public static native void initSpiHw(final long u8g2, final int gpioChip, final int bus, final int dc, final int res, final int cs);
+    public static native void initSpiHw(final long u8g2, final int gpioChip, final int bus, final int dc, final int res,
+            final int cs);
 
     @JniMethod(accessor = "init_spi_sw")
-    public static native void initSpiSw(final long u8g2, final int gpioChip, final int dc, final int res, final int mosi, final int sck,
+    public static native void initSpiSw(final long u8g2, final int gpioChip, final int dc, final int res, final int mosi,
+            final int sck,
             final int cs, final long delay);
 
     @JniMethod(accessor = "done_user_data")
