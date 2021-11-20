@@ -6,6 +6,7 @@ package com.codeferm.u8g2.demo;
 import com.codeferm.u8g2.Common;
 import static com.codeferm.u8g2.Fonts.u8g2_font_10x20_tr;
 import com.codeferm.u8g2.U8g2;
+import static com.codeferm.u8g2.U8x8.U8X8_PIN_NONE;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import org.apache.logging.log4j.LogManager;
@@ -294,15 +295,18 @@ public class Graphics implements Callable<Integer> {
     public void xbm() {
         showText("drawXBM");
         logger.debug(String.format("XBM length %d", logo.length));
-        // Allocate native memory
-        final var image = Common.malloc(logo.length);
-        // Move Java byte array to native memory
-        Common.memMove(image, logo, logo.length);
-        U8g2.drawXBM(u8g2, 0, 0, 64, 64, image);
-        U8g2.sendBuffer(u8g2);
-        // Free native memory
-        Common.free(image);
-        display.sleep(3000);
+        // Make sure image will fit
+        if (U8g2.getDisplayHeight(u8g2) <= 64) {
+            // Allocate native memory
+            final var image = Common.malloc(logo.length);
+            // Move Java byte array to native memory
+            Common.memMove(image, logo, logo.length);
+            U8g2.drawXBM(u8g2, 0, 0, 64, 64, image);
+            U8g2.sendBuffer(u8g2);
+            // Free native memory
+            Common.free(image);
+            display.sleep(3000);
+        }
     }
 
     /**
@@ -325,7 +329,7 @@ public class Graphics implements Callable<Integer> {
                 u8g2 = display.initSwI2c(gpio, scl, sda, reset, delay);
                 break;
             case "spi-hw":
-                u8g2 = display.initHwSpi(gpio, bus, dc, reset, cs);
+                u8g2 = display.initHwSpi(gpio, bus, dc, reset, U8X8_PIN_NONE);
                 break;
             case "spi-sw":
                 u8g2 = display.initSwSpi(gpio, dc, reset, mosi, sck, cs, delay);
