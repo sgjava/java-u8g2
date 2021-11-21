@@ -36,13 +36,13 @@ public class Display {
         SSD1306UNIVISION;
     }
 
-    private SetupType displayType;
+    private SetupType setupType;
 
     /**
      * Default constructor.
      */
     public Display() {
-        displayType = SSD1306NONAME;
+        setupType = SSD1306NONAME;
     }
 
     /**
@@ -51,20 +51,20 @@ public class Display {
      * @param setupType Setup type.
      */
     public Display(final SetupType setupType) {
-        this.displayType = setupType;
+        this.setupType = setupType;
     }
 
     /**
-     * Centralize U8g2 setup.
+     * Centralize I2C setup.
      *
      * @param u8g2 Pointer to u8g2_t structure.
      * @param rotation Display rotation.
      * @param byteCb Byte callback pointer.
      * @param gpioAndDelayCb GPIO callback pointer.
      */
-    public void setup(final long u8g2, final long rotation, final long byteCb,
+    public void setupI2c(final long u8g2, final long rotation, final long byteCb,
             final long gpioAndDelayCb) {
-        switch (displayType) {
+        switch (setupType) {
             case SSD1306NONAME:
                 U8g2.setupSsd1306I2c128x64NonameF(u8g2, rotation, byteCb, gpioAndDelayCb);
                 break;
@@ -72,8 +72,26 @@ public class Display {
                 U8g2.setupSsd1306I2c128x32UnivisionF(u8g2, rotation, byteCb, gpioAndDelayCb);
                 break;
             default:
-                U8g2.setupSsd1306I2c128x64NonameF(u8g2, rotation, byteCb, gpioAndDelayCb);
+                throw new RuntimeException(String.format("Setup type %s not supported for I2C", setupType));
+        }
+    }
+
+    /**
+     * Centralize SPI setup.
+     *
+     * @param u8g2 Pointer to u8g2_t structure.
+     * @param rotation Display rotation.
+     * @param byteCb Byte callback pointer.
+     * @param gpioAndDelayCb GPIO callback pointer.
+     */
+    public void setupSpi(final long u8g2, final long rotation, final long byteCb,
+            final long gpioAndDelayCb) {
+        switch (setupType) {
+            case SSD1306NONAME:
+                U8g2.setupSsd1306128x64NonameF(u8g2, U8G2_R0, u8x8_byte_arm_linux_hw_spi, u8x8_arm_linux_gpio_and_delay);
                 break;
+            default:
+                throw new RuntimeException(String.format("Setup type %s not supported for SPI", setupType));
         }
     }
 
@@ -86,13 +104,13 @@ public class Display {
      */
     public long initHwI2c(final int bus, final int address) {
         final var u8g2 = U8g2.initU8g2();
-        setup(u8g2, U8G2_R0, u8x8_byte_arm_linux_hw_i2c, u8x8_arm_linux_gpio_and_delay);
+        setupI2c(u8g2, U8G2_R0, u8x8_byte_arm_linux_hw_i2c, u8x8_arm_linux_gpio_and_delay);
         U8g2.initI2cHw(u8g2, bus);
         U8g2.setI2CAddress(u8g2, address * 2);
         U8g2.initDisplay(u8g2);
         logger.debug(String.format("Size %d x %d, draw color %d", U8g2.getDisplayWidth(u8g2), U8g2.getDisplayHeight(u8g2), U8g2.
                 getDrawColor(u8g2)));
-        logger.debug(String.format("Bus %02x, Address %02x", bus, address));
+        logger.debug(String.format("Bus 0x%02x, Address %02x", bus, address));
         return u8g2;
     }
 
@@ -108,7 +126,7 @@ public class Display {
      */
     public long initSwI2c(final int gpio, final int scl, final int sda, final int res, final long delay) {
         final var u8g2 = U8g2.initU8g2();
-        setup(u8g2, U8G2_R0, u8x8_byte_sw_i2c, u8x8_arm_linux_gpio_and_delay);
+        setupI2c(u8g2, U8G2_R0, u8x8_byte_sw_i2c, u8x8_arm_linux_gpio_and_delay);
         U8g2.initI2cSw(u8g2, gpio, scl, sda, res, delay);
         U8g2.initDisplay(u8g2);
         logger.debug(String.format("Size %d x %d, draw color %d", U8g2.getDisplayWidth(u8g2), U8g2.getDisplayHeight(u8g2), U8g2.
@@ -129,12 +147,12 @@ public class Display {
      */
     public long initHwSpi(final int gpio, final int bus, final int dc, final int res, final int cs) {
         final var u8g2 = U8g2.initU8g2();
-        setup(u8g2, U8G2_R0, u8x8_byte_arm_linux_hw_spi, u8x8_arm_linux_gpio_and_delay);
+        setupSpi(u8g2, U8G2_R0, u8x8_byte_arm_linux_hw_spi, u8x8_arm_linux_gpio_and_delay);
         U8g2.initSpiHw(u8g2, gpio, bus, dc, res, cs);
         U8g2.initDisplay(u8g2);
         logger.debug(String.format("Size %d x %d, draw color %d", U8g2.getDisplayWidth(u8g2), U8g2.getDisplayHeight(u8g2), U8g2.
                 getDrawColor(u8g2)));
-        logger.debug(String.format("GPIO chip %d, bus %02x, DC %d, RES %d, CS %d", gpio, bus, dc, res, cs));
+        logger.debug(String.format("GPIO chip %d, bus 0x%02x, DC %d, RES %d, CS %d", gpio, bus, dc, res, cs));
         return u8g2;
     }
 
@@ -153,7 +171,7 @@ public class Display {
     public long initSwSpi(final int gpio, final int dc, final int res, final int mosi, final int sck, final int cs,
             final long delay) {
         final var u8g2 = U8g2.initU8g2();
-        setup(u8g2, U8G2_R0, u8x8_byte_4wire_sw_spi, u8x8_arm_linux_gpio_and_delay);
+        setupSpi(u8g2, U8G2_R0, u8x8_byte_4wire_sw_spi, u8x8_arm_linux_gpio_and_delay);
         U8g2.initSpiSw(u8g2, gpio, dc, res, mosi, sck, cs, delay);
         U8g2.initDisplay(u8g2);
         logger.debug(String.format("Size %d x %d, draw color %d", U8g2.getDisplayWidth(u8g2), U8g2.getDisplayHeight(u8g2), U8g2.

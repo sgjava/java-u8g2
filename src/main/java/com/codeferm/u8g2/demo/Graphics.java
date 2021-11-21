@@ -32,6 +32,7 @@ public class Graphics implements Callable<Integer> {
      * Logger.
      */
     private final org.apache.logging.log4j.Logger logger = LogManager.getLogger(Graphics.class);
+
     /**
      * Add display types here and in setup method.
      */
@@ -45,67 +46,67 @@ public class Graphics implements Callable<Integer> {
      * Type allows hardware and software I2C and SPI.
      */
     @Option(names = {"--setup"}, description
-            = "Setup function to call")
+            = "Setup function to call, ${DEFAULT-VALUE} by default.")
     private SetupType setup = SSD1306NONAME;
     /**
      * Type allows hardware and software I2C and SPI.
      */
-    @Option(names = {"--type"}, description = "Type of display")
+    @Option(names = {"--type"}, description = "Type of display, ${DEFAULT-VALUE} by default.")
     private DisplayType type = I2CHW;
     /**
      * GPIO chip number.
      */
-    @Option(names = {"--gpio"}, description = "GPIO chip number (chip 0 default)")
+    @Option(names = {"--gpio"}, description = "GPIO chip number, ${DEFAULT-VALUE} by default.")
     private int gpio = 0x0;
     /**
      * I2C or SPI bus number.
      */
-    @Option(names = {"--bus"}, description = "I2C or SPI bus number (/dec/i2c-0 for I2C and 0x10 is /dev/spidev1.0 for SPI default)")
+    @Option(names = {"--bus"}, description = "I2C or SPI bus number , ${DEFAULT-VALUE} by default.")
     private int bus = 0x0;
     /**
      * I2C address.
      */
-    @Option(names = {"--address"}, description = "I2C address (0x3c default)")
+    @Option(names = {"--address"}, description = "I2C address, ${DEFAULT-VALUE} by default.")
     private int address = 0x3c;
     /**
      * I2C SCL.
      */
-    @Option(names = {"--scl"}, description = "I2C SCL for type i2c-sw (11 default)")
+    @Option(names = {"--scl"}, description = "I2C software SCL pin, ${DEFAULT-VALUE} by default.")
     private int scl = 11;
     /**
      * I2C SDA.
      */
-    @Option(names = {"--sda"}, description = "I2C SDA for type i2c-sw (12 default)")
+    @Option(names = {"--sda"}, description = "I2C software SDA pin, ${DEFAULT-VALUE} by default.")
     private int sda = 12;
     /**
      * DC pin for SPI.
      */
-    @Option(names = {"--dc"}, description = "SPI DC pin (198 default)")
+    @Option(names = {"--dc"}, description = "SPI DC pin, ${DEFAULT-VALUE} by default.")
     private int dc = 198;
     /**
      * RESET pin for SPI.
      */
-    @Option(names = {"--reset"}, description = "I2C/SPI RESET pin (199 default)")
+    @Option(names = {"--reset"}, description = "I2C/SPI RESET pin, ${DEFAULT-VALUE} by default.")
     private int reset = 199;
     /**
      * MOSI pin for SPI.
      */
-    @Option(names = {"--mosi"}, description = "SPI MOSI pin (15 default)")
+    @Option(names = {"--mosi"}, description = "SPI MOSI pin, ${DEFAULT-VALUE} by default.")
     private int mosi = 15;
     /**
      * SCK pin for SPI.
      */
-    @Option(names = {"--sck"}, description = "SPI SCK pin (14 default)")
+    @Option(names = {"--sck"}, description = "SPI SCK pin, ${DEFAULT-VALUE} by default.")
     private int sck = 14;
     /**
      * CS pin for SPI.
      */
-    @Option(names = {"--cs"}, description = "SPI CS pin (13 default)")
+    @Option(names = {"--cs"}, description = "SPI CS pin, ${DEFAULT-VALUE} by default.")
     private int cs = 13;
     /**
      * Nanosecond delay or 0 for none for software I2C and SPI.
      */
-    @Option(names = {"--delay"}, description = "Nanosecond delay for software I2c and SPI (0 default)")
+    @Option(names = {"--delay"}, description = "Nanosecond delay for software I2c and SPI, ${DEFAULT-VALUE} by default.")
     private long delay = 0;
     /**
      * Pointer to u8g2_t struct.
@@ -375,6 +376,9 @@ public class Graphics implements Callable<Integer> {
      * @param args Argument list.
      */
     public static void main(String... args) {
-        System.exit(new CommandLine(new Graphics()).execute(args));
+        System.exit(new CommandLine(new Graphics()).registerConverter(Byte.class, Byte::decode).registerConverter(Byte.TYPE,
+                Byte::decode).registerConverter(Short.class, Short::decode).registerConverter(Short.TYPE, Short::decode).
+                registerConverter(Integer.class, Integer::decode).registerConverter(Integer.TYPE, Integer::decode).
+                registerConverter(Long.class, Long::decode).registerConverter(Long.TYPE, Long::decode).execute(args));
     }
 }
