@@ -7,6 +7,9 @@ import com.codeferm.u8g2.Common;
 import static com.codeferm.u8g2.Fonts.u8g2_font_10x20_tr;
 import com.codeferm.u8g2.U8g2;
 import static com.codeferm.u8g2.U8x8.U8X8_PIN_NONE;
+import com.codeferm.u8g2.demo.Display.SetupType;
+import static com.codeferm.u8g2.demo.Display.SetupType.SSD1306NONAME;
+import static com.codeferm.u8g2.demo.Graphics.DisplayType.I2CHW;
 import java.util.Random;
 import java.util.concurrent.Callable;
 import org.apache.logging.log4j.LogManager;
@@ -30,11 +33,25 @@ public class Graphics implements Callable<Integer> {
      */
     private final org.apache.logging.log4j.Logger logger = LogManager.getLogger(Graphics.class);
     /**
-     * Type option (true = I2C).
+     * Add display types here and in setup method.
      */
-    @Option(names = {"--type"}, description
-            = "i2c-hw I2C hardware, i2c-sw I2C software, spi-hw SPI hardware, spi-sw SPI software (i2c-hw default)")
-    private String type = "i2c-hw";
+    public enum DisplayType {
+        I2CHW,
+        I2CSW,
+        SPIHW,
+        SPISW;
+    }
+    /**
+     * Type allows hardware and software I2C and SPI.
+     */
+    @Option(names = {"--setup"}, description
+            = "Setup function to call")
+    private SetupType setup = SSD1306NONAME;
+    /**
+     * Type allows hardware and software I2C and SPI.
+     */
+    @Option(names = {"--type"}, description = "Type of display")
+    private DisplayType type = I2CHW;
     /**
      * GPIO chip number.
      */
@@ -68,7 +85,7 @@ public class Graphics implements Callable<Integer> {
     /**
      * RESET pin for SPI.
      */
-    @Option(names = {"--reset"}, description = "SPI RESET pin (199 default)")
+    @Option(names = {"--reset"}, description = "I2C/SPI RESET pin (199 default)")
     private int reset = 199;
     /**
      * MOSI pin for SPI.
@@ -232,7 +249,7 @@ public class Graphics implements Callable<Integer> {
         display.sleep(3000);
         showText("drawVLine");
         for (int x = 0; x < width; x += 4) {
-            U8g2.drawVLine(u8g2, x, 0, height - (x / 2));
+            U8g2.drawVLine(u8g2, x, 0, height - (width / height));
             U8g2.sendBuffer(u8g2);
         }
         display.sleep(3000);
@@ -296,7 +313,7 @@ public class Graphics implements Callable<Integer> {
         showText("drawXBM");
         logger.debug(String.format("XBM length %d", logo.length));
         // Make sure image will fit
-        if (U8g2.getDisplayHeight(u8g2) <= 64) {
+        if (U8g2.getDisplayHeight(u8g2) >= 64) {
             // Allocate native memory
             final var image = Common.malloc(logo.length);
             // Move Java byte array to native memory
@@ -306,6 +323,8 @@ public class Graphics implements Callable<Integer> {
             // Free native memory
             Common.free(image);
             display.sleep(3000);
+        } else {
+            logger.warn("Display height less than what's required");
         }
     }
 
@@ -318,20 +337,20 @@ public class Graphics implements Callable<Integer> {
     @Override
     public Integer call() throws InterruptedException {
         var exitCode = 0;
-        display = new Display();
+        display = new Display(setup);
         // Initialize user_data_struct based on display type
         logger.debug(String.format("Type %s", type));
-        switch (type.toLowerCase()) {
-            case "i2c-hw":
+        switch (type) {
+            case I2CHW:
                 u8g2 = display.initHwI2c(bus, address);
                 break;
-            case "i2c-sw":
-                u8g2 = display.initSwI2c(gpio, scl, sda, reset, delay);
+            case I2CSW:
+                u8g2 = display.initSwI2c(gpio, scl, sda, U8X8_PIN_NONE, delay);
                 break;
-            case "spi-hw":
+            case SPIHW:
                 u8g2 = display.initHwSpi(gpio, bus, dc, reset, U8X8_PIN_NONE);
                 break;
-            case "spi-sw":
+            case SPISW:
                 u8g2 = display.initSwSpi(gpio, dc, reset, mosi, sck, cs, delay);
                 break;
             default:
