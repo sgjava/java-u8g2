@@ -4,7 +4,7 @@ Java U8g2 is a high performance library based on [U8g2](https://github.com/olikr
 Rather than try to code the JNI by hand I used [HawtJNI](https://github.com/fusesource/hawtjni)
 to generate the JNI wrappers. I also used some custom code to generate the HawtJNI methods and font constants.
 This makes life easier going forawrd as changes are simple to keep in sync.
-* Latest JDK 17 LTS supported on all platforms except ARM32 which only supports JDK 11 LTS.
+* Latest JDK 17 LTS supported on all platforms
 * Generates JNI source code for U8g2.
 * Generates an autoconf and msbuild source project to build the native library.
 This gets attached to the Maven project as as the native source zip file.
@@ -15,8 +15,10 @@ to the Maven project as a platform specific jar file.
 * Java code follows C API, so if you used U8g2 in C, C++ or even NodeMcu with Lua it
 will immediately be familar. No goofy Java wrapper with a totally different API.
 
-I've been submitting PRs to U8g2 for arm-linux and made it thread safe and multi-display
-capable. I also greatly improved performance of the I2C and SPI software drivers. 
+I've been submitting PRs to U8g2 for
+[arm-linux](https://github.com/olikraus/u8g2/tree/master/sys/arm-linux) port and
+made it thread safe and multi-display capable. I also greatly improved
+performance of the I2C and SPI software drivers. 
 
 ```
 final var u8g2 = U8g2.initU8g2();
@@ -59,8 +61,7 @@ install.sh.
     * `i2cdetect -y 1`
 * I have tested 32 bit and 64 bit boards using the latest Armbian release or in
 the case of the Raspberry Pi Ubuntu Server. The ability to switch seamlessly
-between boards gives you a wide range of SBC choices. I'm currently testing with
-Ubuntu 20.04 LTS Focal Fossa using 5.10 kernels.
+between boards gives you a wide range of SBC choices.
 
 ## Non-root access
 If you want to access devices without root do the following (you can try udev
@@ -88,7 +89,7 @@ The install script assumes a clean OS install. If you would like to install on
 a OS with your own version of Java 17, etc. then you can look at what install.sh
 does and do it manually. What does the script do?
 * Install build dependencies for HawtJNI 
-* Installs Zulu OpenJDK 17 to /usr/lib/jvm (JDK 11 is used for ARM32)
+* Installs Liberica Standard JDK 17 to /usr/lib/jvm
 * Installs Maven to /opt
 * Build HawtJNI (using my fork that works with JDK 17)
 * Build Java U8g2
@@ -98,7 +99,6 @@ does and do it manually. What does the script do?
 * `./install.sh`
 * Check various log files if you have issues running the demo code. Something
 could have gone wrong during the build/bindings generation processes.
-* If you need to recompile use `mvn clean install -Dmaven.compiler.source=11 -Dmaven.compiler.target=11` on ARM32.
 
 ## Run demos
 * `java -cp $HOME/java-u8g2/target/java-u8g2-1.0.0-SNAPSHOT.jar:$HOME/java-u8g2/target/java-u8g2-1.0.0-SNAPSHOT-linux64.jar com.codeferm.u8g2.demo.Graphics --help`
