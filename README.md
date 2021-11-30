@@ -1,5 +1,7 @@
 ![Title](images/title.png)
 
+### Java U8g2 has been merged into [Java UIO](https://github.com/sgjava/javauio). I'll leave this up as a place holder for a while.
+
 Java U8g2 is a high performance library based on [U8g2](https://github.com/olikraus/u8g2): Library for monochrome displays, version 2.
 Rather than try to code the JNI by hand I used [HawtJNI](https://github.com/fusesource/hawtjni)
 to generate the JNI wrappers. I also used some custom code to generate the HawtJNI methods and font constants.
